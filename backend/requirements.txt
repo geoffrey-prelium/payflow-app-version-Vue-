@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+google-cloud-firestore
+google-cloud-secret-manager
+requests
+pandas
+cryptography
+pydantic
+python-multipart
