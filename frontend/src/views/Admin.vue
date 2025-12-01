@@ -4,6 +4,7 @@
       <h1>⚙️ Administration des Clients</h1>
     </div>
     
+    <!-- 1. Sélecteur de client (Card principale) -->
     <div class="card selector-card">
       <label class="section-label">Sélectionner un client à modifier</label>
       <div class="select-wrapper">
@@ -16,8 +17,10 @@
       </div>
     </div>
 
+    <!-- 2. Formulaire (Apparaît toujours) -->
     <form @submit.prevent="saveClient" class="main-form">
       
+      <!-- SECTION 1 : SILAE -->
       <div class="form-section">
         <div class="section-header">
           <span class="icon">📄</span>
@@ -43,6 +46,7 @@
         </div>
       </div>
 
+      <!-- SECTION 2 : ODOO -->
       <div class="form-section">
         <div class="section-header">
           <span class="icon">🟣</span>
@@ -70,12 +74,14 @@
             </div>
           </div>
 
+          <!-- Zone de Test -->
           <div class="test-area">
             <button type="button" @click="testConnection" class="btn-test" :disabled="testing">
               <span v-if="testing">🔌 Connexion en cours...</span>
               <span v-else>🔄 Tester la connexion & Charger les données</span>
             </button>
             
+            <!-- Feedback Visuel -->
             <transition name="fade">
               <div v-if="testMessage" :class="['alert', testStatus === 'success' ? 'alert-success' : 'alert-error']">
                 {{ testMessage }}
@@ -85,6 +91,7 @@
         </div>
       </div>
 
+      <!-- SECTION 3 : COMPTABILITÉ -->
       <div class="form-section" :class="{ 'disabled-section': !hasOptions && !form.odoo_company_id }">
         <div class="section-header">
           <span class="icon">📊</span>
@@ -113,9 +120,11 @@
               <label>Journal de Paie</label>
               <select v-model="form.journal_paie_odoo" required>
                 <option value="" disabled>-- Sélectionner --</option>
+                <!-- Modification ICI : Ajout du nom de la société -->
                 <option v-for="j in odooOptions.journals" :key="j.code" :value="j.code">
-                  📒 [{{ j.code }}] {{ j.name }}
+                  📒 [{{ j.code }}] {{ j.name }} {{ formatJournalCompany(j) }}
                 </option>
+                
                 <option v-if="!hasOptions && form.journal_paie_odoo" :value="form.journal_paie_odoo">
                   Code Actuel : {{ form.journal_paie_odoo }}
                 </option>
@@ -125,6 +134,7 @@
         </div>
       </div>
 
+      <!-- Actions -->
       <div class="form-actions">
         <button type="submit" class="btn-primary big-btn">
           💾 Enregistrer le Client
@@ -163,6 +173,14 @@ const form = reactive({
 });
 
 const hasOptions = computed(() => Object.keys(odooOptions.companies).length > 0);
+
+// Helper pour afficher la société du journal
+const formatJournalCompany = (journal) => {
+  if (journal.company_id && Array.isArray(journal.company_id) && journal.company_id.length > 1) {
+    return `(🏢 ${journal.company_id[1]})`;
+  }
+  return '';
+};
 
 const loadClients = async () => {
     try {

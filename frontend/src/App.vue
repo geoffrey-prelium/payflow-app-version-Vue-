@@ -5,10 +5,10 @@
         <span class="app-title">PayFlow</span>
       </div>
       
-      <nav>
-        <router-link to="/" exact-active-class="active">📊 Journal</router-link>
-        <router-link to="/manual-import" active-class="active">⚡ Import Manuel</router-link>
+      <nav>  
         <router-link to="/admin" active-class="active">⚙️ Admin Clients</router-link>
+        <router-link to="/manual-import" active-class="active">⚡ Import Manuel</router-link>
+        <router-link to="/" exact-active-class="active">📊 Journal</router-link>
       </nav>
       
       <div class="sidebar-footer">
